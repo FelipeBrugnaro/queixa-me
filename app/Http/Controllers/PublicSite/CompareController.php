@@ -38,7 +38,9 @@ class CompareController extends Controller
 
     public function show(Request $request): View|RedirectResponse
     {
-        $slugs = collect(explode(',', (string) $request->query('empresas', '')))
+        $empresas = $request->query('empresas', '');
+        $empresas = is_array($empresas) ? implode(',', $empresas) : $empresas;
+        $slugs = collect(explode(',', (string) $empresas))
             ->map(fn (string $slug) => trim($slug))
             ->filter()
             ->unique()

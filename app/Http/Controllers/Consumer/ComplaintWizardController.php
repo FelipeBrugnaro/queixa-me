@@ -88,7 +88,7 @@ class ComplaintWizardController extends Controller
         ]);
 
         $company = $resolver->handle(
-            $data['company_id'] ?? null,
+            $data['company_id'] !== null ? (int) $data['company_id'] : null,
             $data['company_name'] ?? null,
             $data['company_website'] ?? null,
             $request->user(),
