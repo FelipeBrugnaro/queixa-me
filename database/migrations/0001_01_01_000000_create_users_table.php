@@ -6,19 +6,54 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
+
+            $table->string('type')->default('consumer')->index();
+            $table->string('status')->default('active')->index();
+
+            // Identidade publica: e o unico nome que aparece nas paginas publicas.
+            $table->string('public_name')->nullable()->unique();
+
+            // Identidade civil: nunca e publicada; e transmitida a empresa
+            // apenas mediante consentimento explicito por reclamacao.
             $table->string('name');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->date('birthdate')->nullable();
+            $table->string('gender')->nullable();
+
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
+
+            $table->string('phone', 32)->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
+
+            $table->string('country', 2)->nullable();
+            $table->string('district')->nullable();
+            $table->string('locality')->nullable();
+
+            $table->string('avatar_path')->nullable();
+            $table->string('locale', 5)->default('pt');
+
+            $table->boolean('marketing_opt_in')->default(false);
+            $table->boolean('is_staff')->default(false);
+
+            $table->timestamp('last_login_at')->nullable();
+            $table->string('last_login_ip', 45)->nullable();
+            $table->timestamp('blocked_at')->nullable();
+            $table->string('blocked_reason')->nullable();
+            $table->timestamp('anonymised_at')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index(['type', 'status']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -37,9 +72,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');

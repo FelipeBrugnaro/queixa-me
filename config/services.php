@@ -35,4 +35,36 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Login social
+    |--------------------------------------------------------------------------
+    |
+    | Sem client_id configurado, os botões desaparecem da interface e as rotas
+    | devolvem 404. Isto permite lançar o portal sem estas integrações e
+    | ativá-las depois sem tocar em código.
+    |
+    */
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => '/auth/google/callback',
+    ],
+
+    'apple' => [
+        'client_id' => env('APPLE_CLIENT_ID'),
+        'client_secret' => env('APPLE_CLIENT_SECRET'),
+        'redirect' => '/auth/apple/callback',
+    ],
+
+    /*
+    | Fornecedor de SMS. A arquitetura de verificação de telefone está pronta
+    | (ver PhoneVerificationService); falta apenas ligar um driver real.
+    */
+    'sms' => [
+        'driver' => env('SMS_DRIVER', 'log'),
+        'from' => env('SMS_FROM', 'queixa.me'),
+    ],
+
 ];

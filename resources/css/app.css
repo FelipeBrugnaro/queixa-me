@@ -1,9 +1,232 @@
 @import 'tailwindcss';
 
+@source '../../app/**/*.php';
+@source '../../resources/views/**/*.blade.php';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+
+/* =====================================================================
+   queixa.me — sistema de design
+   Tom: confiança e transparência sem parecer um site institucional.
+   Azul profundo para a estrutura, verde para resolução, âmbar para
+   pendências, vermelho apenas para falhas reais.
+   ===================================================================== */
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --color-ink-50: #f6f7fb;
+    --color-ink-100: #eceef6;
+    --color-ink-200: #d7dbe9;
+    --color-ink-300: #b3bad2;
+    --color-ink-400: #8892b4;
+    --color-ink-500: #667099;
+    --color-ink-600: #4d557c;
+    --color-ink-700: #3b4263;
+    --color-ink-800: #262b45;
+    --color-ink-900: #161a2c;
+    --color-ink-950: #0c0f1c;
+
+    --color-brand-50: #eef2ff;
+    --color-brand-100: #e0e7ff;
+    --color-brand-200: #c7d2fe;
+    --color-brand-300: #a5b4fc;
+    --color-brand-400: #818cf8;
+    --color-brand-500: #6366f1;
+    --color-brand-600: #4f46e5;
+    --color-brand-700: #4338ca;
+    --color-brand-800: #3730a3;
+    --color-brand-900: #312e81;
+
+    --color-accent-400: #fbbf24;
+    --color-accent-500: #f59e0b;
+    --color-accent-600: #d97706;
+
+    --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
+    --shadow-lift: 0 2px 4px rgb(15 23 42 / 0.05), 0 18px 40px -20px rgb(15 23 42 / 0.25);
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        @apply bg-ink-50 text-ink-800 antialiased;
+    }
+
+    h1, h2, h3, h4 {
+        @apply text-ink-900 font-semibold tracking-tight;
+        text-wrap: balance;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-brand-600;
+    }
+
+    /* Respeitar quem desativou animações no sistema operativo. */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+@layer components {
+    .container-page {
+        @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+    }
+
+    .container-narrow {
+        @apply mx-auto w-full max-w-3xl px-4 sm:px-6;
+    }
+
+    /* --- Botões: usar sempre "btn btn-primary" --- */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+               transition duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .btn-primary {
+        @apply bg-brand-600 text-white shadow-sm hover:bg-brand-700 active:bg-brand-800;
+    }
+
+    .btn-secondary {
+        @apply bg-white text-ink-800 ring-1 ring-ink-200 hover:bg-ink-50 hover:ring-ink-300;
+    }
+
+    .btn-ghost {
+        @apply text-ink-600 hover:bg-ink-100 hover:text-ink-900;
+    }
+
+    .btn-danger {
+        @apply bg-rose-600 text-white hover:bg-rose-700;
+    }
+
+    .btn-lg {
+        @apply rounded-2xl px-6 py-3.5 text-base;
+    }
+
+    .btn-sm {
+        @apply rounded-lg px-3 py-1.5 text-xs;
+    }
+
+    /* --- Superfícies --- */
+    .card {
+        @apply rounded-2xl bg-white ring-1 ring-ink-200/70;
+        box-shadow: var(--shadow-soft);
+    }
+
+    .card-hover {
+        @apply transition duration-200 hover:ring-ink-300;
+    }
+
+    .card-hover:hover {
+        box-shadow: var(--shadow-lift);
+        transform: translateY(-1px);
+    }
+
+    .card-body {
+        @apply p-5 sm:p-6;
+    }
+
+    /* --- Formulários --- */
+    .label {
+        @apply mb-1.5 block text-sm font-medium text-ink-800;
+    }
+
+    .hint {
+        @apply mt-1.5 text-xs text-ink-500;
+    }
+
+    .input {
+        @apply block w-full rounded-xl border-0 bg-white px-3.5 py-2.5 text-ink-900 shadow-sm
+               ring-1 ring-inset ring-ink-200 placeholder:text-ink-400
+               focus:ring-2 focus:ring-inset focus:ring-brand-600 sm:text-sm;
+    }
+
+    .input-error {
+        @apply ring-rose-400 focus:ring-rose-500;
+    }
+
+    .textarea {
+        @apply min-h-40 leading-relaxed;
+    }
+
+    .checkbox {
+        @apply mt-0.5 size-4 shrink-0 rounded border-ink-300 text-brand-600 focus:ring-brand-600;
+    }
+
+    .error-text {
+        @apply mt-1.5 flex items-start gap-1 text-xs font-medium text-rose-600;
+    }
+
+    /* --- Etiquetas: usar "badge" + classes de cor --- */
+    .badge {
+        @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset;
+    }
+
+    /* --- Conteúdo editorial --- */
+    .prose-qm {
+        @apply leading-relaxed text-ink-700;
+    }
+
+    .prose-qm h2 {
+        @apply mt-10 mb-3 text-xl font-semibold text-ink-900;
+    }
+
+    .prose-qm h3 {
+        @apply mt-8 mb-2 text-lg font-semibold text-ink-900;
+    }
+
+    .prose-qm p {
+        @apply mb-4;
+    }
+
+    .prose-qm ul {
+        @apply mb-4 ml-5 list-disc space-y-1.5;
+    }
+
+    .prose-qm ol {
+        @apply mb-4 ml-5 list-decimal space-y-1.5;
+    }
+
+    .prose-qm a {
+        @apply font-medium text-brand-700 underline underline-offset-2 hover:text-brand-800;
+    }
+
+    .prose-qm strong {
+        @apply font-semibold text-ink-900;
+    }
+
+    .prose-qm table {
+        @apply mb-4 w-full text-sm;
+    }
+
+    .prose-qm th {
+        @apply border-b border-ink-200 py-2 text-left font-semibold text-ink-900;
+    }
+
+    .prose-qm td {
+        @apply border-b border-ink-100 py-2;
+    }
+
+    /* --- Navegação --- */
+    .nav-link {
+        @apply rounded-lg px-3 py-2 text-sm font-medium text-ink-600 transition hover:bg-ink-100 hover:text-ink-900;
+    }
+
+    .nav-link-active {
+        @apply bg-brand-50 text-brand-700 hover:bg-brand-100 hover:text-brand-800;
+    }
+
+    .skip-link {
+        @apply sr-only;
+    }
+
+    .skip-link:focus {
+        @apply not-sr-only absolute left-4 top-4 z-50 rounded-lg bg-brand-600 px-4 py-2 font-medium text-white;
+    }
 }

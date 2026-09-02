@@ -38,6 +38,20 @@ return [
             'report' => false,
         ],
 
+        /*
+         * Anexos de reclamações. Nunca acessível diretamente por URL: os
+         * ficheiros são servidos por AttachmentController depois de
+         * verificada a autorização de quem os pede.
+         */
+        'private' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private'),
+            'serve' => false,
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
