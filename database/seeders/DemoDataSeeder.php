@@ -19,6 +19,7 @@ use App\Domain\Complaints\Enums\ModerationStatus;
 use App\Domain\Complaints\Models\Complaint;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
@@ -91,7 +92,7 @@ class DemoDataSeeder extends Seeder
         return $admin;
     }
 
-    /** @return \Illuminate\Support\Collection<int,Company> */
+    /** @return Collection<int,Company> */
     private function createCompanies($categories)
     {
         $definitions = [

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Consumer;
 
 use App\Domain\Accounts\Enums\ConsentType;
+use App\Domain\Accounts\Models\User;
 use App\Domain\Accounts\Services\ConsentRecorder;
 use App\Domain\Companies\Actions\ResolveOrCreateCompany;
 use App\Domain\Companies\Models\CompanyCategory;
@@ -18,6 +19,7 @@ use App\Domain\Complaints\Services\AttachmentUploader;
 use App\Domain\Complaints\Services\ComplaintTimeline;
 use App\Domain\Complaints\Services\ComplaintWorkflow;
 use App\Domain\Complaints\Services\SensitiveDataScanner;
+use App\Domain\Shared\Support\Districts;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Complaints\StoreComplaintContactRequest;
 use App\Http\Requests\Complaints\StoreComplaintDescriptionRequest;
@@ -78,19 +80,21 @@ class ComplaintWizardController extends Controller
 
     public function storeCompany(Request $request, ResolveOrCreateCompany $resolver): RedirectResponse
     {
+        // O website da empresa deixou de ser pedido: quem reclama raramente
+        // o sabe de cor, e a moderação identifica a entidade melhor do que
+        // um campo opcional preenchido à pressa.
         $data = $request->validate([
             'company_id' => ['nullable', 'integer', 'exists:companies,id'],
             'company_name' => ['required_without:company_id', 'nullable', 'string', 'min:2', 'max:160'],
-            'company_website' => ['nullable', 'string', 'max:190'],
             'kind' => ['required', 'in:consumer,employee'],
         ], [
             'company_name.required_without' => 'Indica a empresa sobre a qual queres reclamar.',
         ]);
 
         $company = $resolver->handle(
-            $data['company_id'] !== null ? (int) $data['company_id'] : null,
+            isset($data['company_id']) ? (int) $data['company_id'] : null,
             $data['company_name'] ?? null,
-            $data['company_website'] ?? null,
+            null,
             $request->user(),
         );
 
@@ -99,9 +103,11 @@ class ComplaintWizardController extends Controller
         $complaint = DB::transaction(function () use ($request, $company, $data): Complaint {
             $complaint = Complaint::create([
                 'user_id' => $request->user()->id,
-                'company_id' => $company->isPublic() ? $company->id : $company->id,
+                // A reclamação liga-se sempre à ficha, mesmo quando esta ainda
+                // está por validar. O nome em texto livre só é guardado nesse
+                // caso, para a moderação poder confirmar ou fundir a ficha.
+                'company_id' => $company->id,
                 'company_name_raw' => $company->isPublic() ? null : $company->name,
-                'company_website_raw' => $data['company_website'] ?? null,
                 'category_id' => $company->category_id,
                 'kind' => ComplaintKind::from($data['kind']),
                 'title' => '',
@@ -241,6 +247,7 @@ class ComplaintWizardController extends Controller
                 'address' => $details?->address,
             ],
             'missingFields' => $user->missingComplaintProfileFields(),
+            'districts' => Districts::all(),
         ]);
     }
 
@@ -249,9 +256,9 @@ class ComplaintWizardController extends Controller
         $this->authorizeDraft($request, $complaint);
 
         $data = $request->validated();
-        $user = $request->user();
+        $identityIsPublic = $request->identityIsPublic();
 
-        DB::transaction(function () use ($complaint, $data, $user): void {
+        DB::transaction(function () use ($complaint, $data, $identityIsPublic): void {
             $complaint->contactDetails()->updateOrCreate(
                 ['complaint_id' => $complaint->id],
                 [
@@ -271,22 +278,13 @@ class ComplaintWizardController extends Controller
                 'district' => $data['district'] ?? $complaint->district,
                 'locality' => $data['locality'] ?? $complaint->locality,
                 'country' => $data['country'] ?? $complaint->country,
-                'is_identity_public' => (bool) ($data['is_identity_public'] ?? true),
+                'is_identity_public' => $identityIsPublic,
             ]);
-
-            // Guardar no perfil é opt-in explícito: não assumimos que o
-            // utilizador quer que estes dados fiquem associados à conta.
-            if (! empty($data['save_to_profile'])) {
-                $user->fill(array_filter([
-                    'first_name' => $data['first_name'],
-                    'last_name' => $data['last_name'],
-                    'phone' => $data['phone'] ?? null,
-                    'country' => $data['country'] ?? null,
-                    'district' => $data['district'] ?? null,
-                    'locality' => $data['locality'] ?? null,
-                ]))->save();
-            }
         });
+
+        // Guardar no perfil deixou de ser uma caixa perdida no meio deste
+        // formulário: é perguntado no fim, junto da submissão, quando a
+        // pessoa já sabe que dados escreveu.
 
         return redirect()->route('complaints.wizard.review', $complaint->uuid);
     }
@@ -329,6 +327,7 @@ class ComplaintWizardController extends Controller
             'accept_terms' => ['accepted'],
             'accept_data_transfer' => ['accepted'],
             'confirm_truthful' => ['accepted'],
+            'save_to_profile' => ['nullable', 'boolean'],
         ], [
             'accept_terms.accepted' => 'Tens de aceitar os Termos e Condições e a Política de Privacidade.',
             'accept_data_transfer.accepted' => 'Sem este consentimento não podemos transmitir a reclamação à empresa.',
@@ -337,6 +336,10 @@ class ComplaintWizardController extends Controller
 
         DB::transaction(function () use ($request, $complaint, $consents): void {
             $complaint->update(['share_contact_with_company' => true]);
+
+            if ($request->boolean('save_to_profile')) {
+                $this->copyContactToProfile($complaint, $request->user());
+            }
 
             $complaint->contactDetails?->forceFill([
                 'shared_with_company_at' => now(),
@@ -355,9 +358,40 @@ class ComplaintWizardController extends Controller
             $this->workflow->submit($complaint, $request->user());
         });
 
+        // A confirmação de sucesso é um ecrã próprio, não uma faixa verde
+        // no topo: submeter uma reclamação é o momento que justifica todo
+        // o esforço do formulário e merece um remate à altura.
         return redirect()
             ->route('consumer.complaints.show', $complaint->uuid)
-            ->with('success', 'Reclamação submetida. Vamos analisá-la e avisamos-te assim que for publicada.');
+            ->with('celebrate', [
+                'title' => 'Reclamação submetida',
+                'message' => 'Vamos analisá-la e avisamos-te assim que for publicada. Normalmente demora menos de 48 horas.',
+                'reference' => $complaint->reference,
+            ]);
+    }
+
+    /**
+     * Copia para o perfil os dados de contacto desta reclamação.
+     *
+     * Só o que estiver preenchido: a resposta a "guardar no meu perfil" não
+     * deve poder apagar dados que a pessoa já lá tinha.
+     */
+    private function copyContactToProfile(Complaint $complaint, User $user): void
+    {
+        $details = $complaint->contactDetails;
+
+        if ($details === null) {
+            return;
+        }
+
+        $user->fill(array_filter([
+            'first_name' => $details->first_name,
+            'last_name' => $details->last_name,
+            'phone' => $details->phone,
+            'country' => $details->country,
+            'district' => $details->district,
+            'locality' => $details->locality,
+        ]))->save();
     }
 
     public function destroy(Request $request, Complaint $complaint): RedirectResponse

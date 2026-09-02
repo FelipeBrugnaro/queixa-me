@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Domain\Seo\Services\SeoManager;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ class PreventIndexing
         $response = $next($request);
         $response->headers->set('X-Robots-Tag', 'noindex, nofollow', true);
 
-        app(\App\Domain\Seo\Services\SeoManager::class)->noindex(follow: false);
+        app(SeoManager::class)->noindex(follow: false);
 
         return $response;
     }

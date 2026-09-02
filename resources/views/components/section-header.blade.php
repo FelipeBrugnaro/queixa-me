@@ -1,15 +1,21 @@
-@props(['title', 'description' => null, 'href' => null, 'linkLabel' => 'Ver tudo', 'level' => 'h2'])
+@props(['title', 'description' => null, 'href' => null, 'linkLabel' => 'Ver tudo', 'eyebrow' => null])
 
-<div class="mb-6 flex flex-wrap items-end justify-between gap-3">
-    <div class="max-w-2xl">
-        <{{ $level }} class="text-xl font-semibold sm:text-2xl">{{ $title }}</{{ $level }}>
-        @if ($description)
-            <p class="mt-1.5 text-sm leading-relaxed text-ink-600">{{ $description }}</p>
+<div class="mb-8">
+    @if ($eyebrow)
+        <p class="eyebrow mb-2">{{ $eyebrow }}</p>
+    @endif
+
+    <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-ink-200 pb-4">
+        <h2 class="text-2xl sm:text-[1.75rem]">{{ $title }}</h2>
+
+        @if ($href)
+            <a href="{{ $href }}" class="shrink-0 pb-1 text-sm font-semibold text-brand-700 transition hover:text-brand-900">
+                {{ $linkLabel }} <span aria-hidden="true">&rarr;</span>
+            </a>
         @endif
     </div>
-    @if ($href)
-        <a href="{{ $href }}" class="shrink-0 text-sm font-semibold text-brand-700 hover:text-brand-800">
-            {{ $linkLabel }} <span aria-hidden="true">&rarr;</span>
-        </a>
+
+    @if ($description)
+        <p class="mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-ink-600">{{ $description }}</p>
     @endif
 </div>

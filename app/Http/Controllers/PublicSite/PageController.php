@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\PublicSite;
 
 use App\Domain\Content\Models\FaqCategory;
-use App\Domain\Content\Models\FaqItem;
 use App\Domain\Content\Models\LegalDocument;
 use App\Domain\Seo\Services\SchemaBuilder;
 use App\Http\Controllers\Controller;

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Complaints;
 
+use App\Domain\Shared\Support\Countries;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreComplaintContactRequest extends FormRequest
 {
@@ -19,13 +21,20 @@ class StoreComplaintContactRequest extends FormRequest
             'postal_code' => ['nullable', 'string', 'max:16'],
             'locality' => ['nullable', 'string', 'max:120'],
             'district' => ['nullable', 'string', 'max:120'],
-            'country' => ['nullable', 'string', 'size:2'],
+            'country' => ['nullable', Rule::in(Countries::codes())],
 
-            // Se a identidade fica pública ou não é escolha do autor, e é
-            // independente dos dados transmitidos à empresa: a empresa recebe
-            // sempre os dados necessários para tratar o caso.
-            'is_identity_public' => ['nullable', 'boolean'],
-            'save_to_profile' => ['nullable', 'boolean'],
+            /*
+             * Como assinar a reclamação.
+             *
+             * Não é uma caixa de "mostrar o meu nome" — o nome público aparece
+             * sempre, a menos que a pessoa escolha o contrário. São duas
+             * opções explícitas, para que a escolha seja consciente.
+             *
+             * Em qualquer dos casos a empresa recebe os dados de contacto:
+             * o anonimato é perante o público, não perante quem tem de
+             * resolver o problema.
+             */
+            'signature' => ['required', 'in:public,anonymous'],
         ];
     }
 
@@ -39,6 +48,21 @@ class StoreComplaintContactRequest extends FormRequest
             'postal_code' => 'código postal',
             'locality' => 'localidade',
             'district' => 'distrito',
+            'country' => 'país',
+            'signature' => 'forma de assinar',
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'signature.required' => 'Escolhe como queres que a reclamação apareça no portal.',
+        ];
+    }
+
+    /** A reclamação guarda um booleano; o formulário faz uma pergunta. */
+    public function identityIsPublic(): bool
+    {
+        return $this->input('signature') === 'public';
     }
 }

@@ -33,6 +33,29 @@ class Complaint extends Model
         'desired_resolution', 'extra_info', 'purchase_reference',
         'amount_involved', 'currency', 'is_identity_public',
         'share_contact_with_company', 'country', 'district', 'locality',
+        'submitted_ip',
+    ];
+
+    /**
+     * Valores iniciais garantidos em memória.
+     *
+     * A base de dados tem os mesmos defaults, mas esses só se aplicam do lado
+     * do servidor: um modelo acabado de criar ficaria sem `moderation_status`
+     * carregado e qualquer regra que o lesse veria null. Declará-los aqui faz
+     * com que a instância seja coerente desde o primeiro momento.
+     */
+    protected $attributes = [
+        'moderation_status' => 'draft',
+        'stage' => 'not_published',
+        'kind' => 'consumer',
+        'is_identity_public' => true,
+        'share_contact_with_company' => false,
+        'is_indexable' => true,
+        'priority' => 0,
+        'views_count' => 0,
+        'replies_count' => 0,
+        'reports_count' => 0,
+        'helpful_count' => 0,
     ];
 
     protected function casts(): array

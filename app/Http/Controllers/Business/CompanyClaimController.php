@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Business;
 
-use App\Domain\Companies\Enums\CompanyRole;
 use App\Domain\Companies\Enums\CompanyStatus;
 use App\Domain\Companies\Models\Company;
 use App\Domain\Companies\Models\CompanyClaim;

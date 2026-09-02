@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Domain\Accounts\Models\User;
 use App\Domain\Companies\Models\Company;
 use App\Domain\Complaints\Models\Complaint;
 use App\Domain\Complaints\Models\ComplaintReply;
 use App\Domain\Content\Models\Post;
 use App\Domain\Messaging\Models\Message;
+use App\Domain\Seo\Services\SeoManager;
 use App\Http\ViewComposers\PanelNavigationComposer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Um SeoManager por pedido: os controllers descrevem a pagina e o
         // layout le a mesma instancia no momento de renderizar.
-        $this->app->scoped(\App\Domain\Seo\Services\SeoManager::class);
+        $this->app->scoped(SeoManager::class);
     }
 
     public function boot(): void
@@ -61,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
             'company' => Company::class,
             'message' => Message::class,
             'post' => Post::class,
-            'user' => \App\Domain\Accounts\Models\User::class,
+            'user' => User::class,
         ]);
     }
 

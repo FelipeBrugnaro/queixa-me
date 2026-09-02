@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 /**
  * Autenticação com Google e Apple.
@@ -38,14 +39,14 @@ class SocialAuthController extends Controller
     {
         $this->ensureProviderIsConfigured($provider);
 
-        if (! class_exists(\Laravel\Socialite\Facades\Socialite::class)) {
+        if (! class_exists(Socialite::class)) {
             return redirect()->route('login')->with(
                 'warning',
                 'O início de sessão com '.ucfirst($provider).' ainda não está disponível.'
             );
         }
 
-        return \Laravel\Socialite\Facades\Socialite::driver($provider)->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
     public function callback(Request $request, string $provider): RedirectResponse
@@ -135,12 +136,12 @@ class SocialAuthController extends Controller
      */
     private function resolveProviderUser(string $provider): ?array
     {
-        if (! class_exists(\Laravel\Socialite\Facades\Socialite::class)) {
+        if (! class_exists(Socialite::class)) {
             return null;
         }
 
         try {
-            $socialite = \Laravel\Socialite\Facades\Socialite::driver($provider)->user();
+            $socialite = Socialite::driver($provider)->user();
         } catch (\Throwable) {
             return null;
         }

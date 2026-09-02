@@ -225,15 +225,35 @@ class Company extends Model
         };
     }
 
+    /**
+     * Escala de desfecho, em cinco degraus.
+     *
+     * Vai do terracota (ignora quem reclama) ao verde da marca (resolve) —
+     * a mesma escala em toda a plataforma, para que a cor de um índice
+     * signifique sempre o mesmo, esteja onde estiver.
+     */
     public function satisfactionColorClasses(): string
     {
         return match (true) {
-            $this->satisfaction_index === null => 'bg-slate-100 text-slate-600 ring-slate-200',
-            $this->satisfaction_index >= 80 => 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-            $this->satisfaction_index >= 65 => 'bg-lime-50 text-lime-700 ring-lime-200',
-            $this->satisfaction_index >= 50 => 'bg-amber-50 text-amber-700 ring-amber-200',
-            $this->satisfaction_index >= 35 => 'bg-orange-50 text-orange-700 ring-orange-200',
+            $this->satisfaction_index === null => 'bg-ink-100 text-ink-600 ring-ink-200',
+            $this->satisfaction_index >= 80 => 'bg-brand-50 text-brand-800 ring-brand-200',
+            $this->satisfaction_index >= 65 => 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+            $this->satisfaction_index >= 50 => 'bg-amber-50 text-amber-800 ring-amber-200',
+            $this->satisfaction_index >= 35 => 'bg-amber-100 text-amber-900 ring-amber-300',
             default => 'bg-rose-50 text-rose-700 ring-rose-200',
+        };
+    }
+
+    /** Cor sólida da barra de escala do índice. */
+    public function satisfactionBarClass(): string
+    {
+        return match (true) {
+            $this->satisfaction_index === null => 'bg-ink-300',
+            $this->satisfaction_index >= 80 => 'bg-brand-600',
+            $this->satisfaction_index >= 65 => 'bg-emerald-500',
+            $this->satisfaction_index >= 50 => 'bg-amber-400',
+            $this->satisfaction_index >= 35 => 'bg-amber-500',
+            default => 'bg-rose-500',
         };
     }
 

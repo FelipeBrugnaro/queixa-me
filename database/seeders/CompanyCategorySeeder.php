@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Domain\Companies\Models\CompanyCategory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class CompanyCategorySeeder extends Seeder
 {
@@ -38,7 +39,7 @@ class CompanyCategorySeeder extends Seeder
 
         foreach ($categories as $position => [$name, $description]) {
             CompanyCategory::updateOrCreate(
-                ['slug' => \Illuminate\Support\Str::slug($name)],
+                ['slug' => Str::slug($name)],
                 [
                     'name' => $name,
                     'description' => $description,

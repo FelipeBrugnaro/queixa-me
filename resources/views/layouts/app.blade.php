@@ -20,7 +20,7 @@
     @include('partials.header')
 
     @if ($seo->breadcrumbItems() && ! ($hideBreadcrumbs ?? false))
-        <nav aria-label="Caminho de navegação" class="border-b border-ink-200/60 bg-white">
+        <nav aria-label="Caminho de navegação" class="border-b border-ink-200 bg-surface">
             <div class="container-page">
                 <ol class="flex flex-wrap items-center gap-1 py-3 text-xs text-ink-500">
                     @foreach ($seo->breadcrumbItems() as $index => $crumb)
@@ -49,5 +49,6 @@
     </main>
 
     @include('partials.footer')
+    @include('partials.celebrate')
 </body>
 </html>

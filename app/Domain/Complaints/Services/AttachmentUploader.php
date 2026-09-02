@@ -8,6 +8,7 @@ use App\Domain\Accounts\Models\User;
 use App\Domain\Complaints\Models\Complaint;
 use App\Domain\Complaints\Models\ComplaintAttachment;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
 /**
@@ -40,7 +41,7 @@ class AttachmentUploader
         $stream = fopen($file->getRealPath(), 'rb');
 
         try {
-            \Illuminate\Support\Facades\Storage::disk('private')->put($path, $stream, ['visibility' => 'private']);
+            Storage::disk('private')->put($path, $stream, ['visibility' => 'private']);
         } finally {
             if (is_resource($stream)) {
                 fclose($stream);
@@ -67,7 +68,7 @@ class AttachmentUploader
 
     public function delete(ComplaintAttachment $attachment): void
     {
-        \Illuminate\Support\Facades\Storage::disk($attachment->disk)->delete($attachment->path);
+        Storage::disk($attachment->disk)->delete($attachment->path);
         $attachment->delete();
     }
 
@@ -139,7 +140,7 @@ class AttachmentUploader
         }
 
         rescue(function () use ($path, $mime): void {
-            $disk = \Illuminate\Support\Facades\Storage::disk('private');
+            $disk = Storage::disk('private');
             $contents = $disk->get($path);
             $image = @imagecreatefromstring((string) $contents);
 

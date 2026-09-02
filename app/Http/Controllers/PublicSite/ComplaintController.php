@@ -9,6 +9,7 @@ use App\Domain\Companies\Models\CompanyCategory;
 use App\Domain\Complaints\Enums\ComplaintStage;
 use App\Domain\Complaints\Models\Complaint;
 use App\Domain\Seo\Services\SchemaBuilder;
+use App\Domain\Shared\Support\Districts;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
@@ -48,7 +49,7 @@ class ComplaintController extends Controller
             'filters' => $filters,
             'categories' => CompanyCategory::orderBy('name')->get(['id', 'name', 'slug']),
             'stages' => ComplaintStage::publicFilterable(),
-            'districts' => $this->districts(),
+            'districts' => Districts::all(),
             'activeCompany' => $filters['empresa']
                 ? Company::where('slug', $filters['empresa'])->first(['id', 'name', 'slug'])
                 : null,
@@ -172,16 +173,5 @@ class ComplaintController extends Controller
         }
 
         $this->breadcrumbs([['label' => 'Reclamações', 'url' => route('complaints.index')]]);
-    }
-
-    /** @return array<int,string> */
-    private function districts(): array
-    {
-        return [
-            'Aveiro', 'Beja', 'Braga', 'Bragança', 'Castelo Branco', 'Coimbra', 'Évora',
-            'Faro', 'Guarda', 'Leiria', 'Lisboa', 'Portalegre', 'Porto', 'Santarém',
-            'Setúbal', 'Viana do Castelo', 'Vila Real', 'Viseu',
-            'Região Autónoma dos Açores', 'Região Autónoma da Madeira',
-        ];
     }
 }

@@ -9,6 +9,8 @@ use App\Domain\Accounts\Services\EmailChangeService;
 use App\Domain\Accounts\Services\PhoneVerificationService;
 use App\Domain\Shared\Rules\AllowedPublicName;
 use App\Domain\Shared\Rules\MinimumAge;
+use App\Domain\Shared\Support\Countries;
+use App\Domain\Shared\Support\Districts;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -35,7 +37,7 @@ class ProfileController extends Controller
             'genders' => Gender::options(),
             'pendingEmailChange' => $this->emailChanges->pendingFor($request->user()),
             'socialAccounts' => $request->user()->socialAccounts,
-            'districts' => $this->districts(),
+            'districts' => Districts::all(),
         ]);
     }
 
@@ -55,7 +57,7 @@ class ProfileController extends Controller
             'last_name' => ['required', 'string', 'max:80'],
             'birthdate' => ['nullable', 'date', new MinimumAge],
             'gender' => ['nullable', Rule::enum(Gender::class)],
-            'country' => ['nullable', 'string', 'size:2'],
+            'country' => ['nullable', Rule::in(Countries::codes())],
             'district' => ['nullable', 'string', 'max:120'],
             'locality' => ['nullable', 'string', 'max:120'],
         ], [], [
@@ -197,16 +199,5 @@ class ProfileController extends Controller
         }
 
         return back()->with('success', 'Número de telefone confirmado.');
-    }
-
-    /** @return array<int,string> */
-    private function districts(): array
-    {
-        return [
-            'Aveiro', 'Beja', 'Braga', 'Bragança', 'Castelo Branco', 'Coimbra', 'Évora',
-            'Faro', 'Guarda', 'Leiria', 'Lisboa', 'Portalegre', 'Porto', 'Santarém',
-            'Setúbal', 'Viana do Castelo', 'Vila Real', 'Viseu',
-            'Região Autónoma dos Açores', 'Região Autónoma da Madeira',
-        ];
     }
 }

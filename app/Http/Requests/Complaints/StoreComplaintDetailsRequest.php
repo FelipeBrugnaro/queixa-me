@@ -6,6 +6,15 @@ namespace App\Http\Requests\Complaints;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Terceiro passo do assistente.
+ *
+ * Pedimos deliberadamente pouco. Número de encomenda e valor envolvido foram
+ * retirados: são dados que a maioria das pessoas não tem à mão no momento em
+ * que escreve, e cada campo extra neste ponto do formulário custa
+ * submissões. O que for preciso para identificar o processo é tratado
+ * depois, no canal privado com a empresa.
+ */
 class StoreComplaintDetailsRequest extends FormRequest
 {
     public function rules(): array
@@ -21,9 +30,6 @@ class StoreComplaintDetailsRequest extends FormRequest
             'category_id' => ['nullable', 'integer', 'exists:company_categories,id'],
             'occurred_on' => ['nullable', 'date', 'before_or_equal:today', 'after:'.now()->subYears(5)->toDateString()],
             'desired_resolution' => ['nullable', 'string', 'max:'.config('queixame.complaints.desired_resolution_max')],
-            'extra_info' => ['nullable', 'string', 'max:'.config('queixame.complaints.extra_info_max')],
-            'purchase_reference' => ['nullable', 'string', 'max:120'],
-            'amount_involved' => ['nullable', 'numeric', 'min:0', 'max:9999999'],
 
             'attachments' => ['nullable', 'array', 'max:'.$attachments['max_files']],
             'attachments.*' => [
@@ -40,9 +46,6 @@ class StoreComplaintDetailsRequest extends FormRequest
             'title' => 'assunto',
             'occurred_on' => 'data da ocorrência',
             'desired_resolution' => 'resolução pretendida',
-            'extra_info' => 'informações adicionais',
-            'purchase_reference' => 'referência da compra',
-            'amount_involved' => 'valor envolvido',
             'attachments' => 'anexos',
         ];
     }
@@ -54,14 +57,5 @@ class StoreComplaintDetailsRequest extends FormRequest
             'attachments.*.mimes' => 'Só aceitamos imagens e ficheiros PDF.',
             'attachments.*.max' => 'Cada ficheiro tem de ter menos de :max KB.',
         ];
-    }
-
-    protected function prepareForValidation(): void
-    {
-        if ($this->filled('amount_involved')) {
-            $this->merge([
-                'amount_involved' => str_replace(',', '.', (string) $this->input('amount_involved')),
-            ]);
-        }
     }
 }

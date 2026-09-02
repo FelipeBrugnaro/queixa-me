@@ -8,9 +8,14 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
+            /*
+             * Plus Jakarta Sans: geométrica, contemporânea e com pesos altos
+             * que aguentam títulos grandes sem parecerem institucionais.
+             * Auto-alojada — nenhum pedido a terceiros no carregamento.
+             */
             fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
+                bunny('Plus Jakarta Sans', {
+                    weights: [400, 500, 600, 700, 800],
                 }),
             ],
         }),

@@ -181,13 +181,24 @@ class CompanyController extends Controller
 
         $companies = Company::public()
             ->search($term)
+            // A categoria é lida no map() abaixo: sem este eager load, cada
+            // sugestão dispara uma consulta extra — e com lazy loading
+            // desativado o endpoint devolve 500 em vez de degradar em silêncio.
+            ->with('category:id,name')
             ->orderByDesc('published_complaints_count')
             ->limit((int) config('queixame.search.autocomplete_limit'))
-            ->get(['id', 'name', 'slug', 'district', 'category_id', 'published_complaints_count'])
+            ->get(['id', 'name', 'slug', 'district', 'category_id', 'status', 'satisfaction_index', 'published_complaints_count'])
             ->map(fn (Company $company) => [
                 'id' => $company->id,
                 'name' => $company->name,
+                'url' => $company->url(),
                 'initials' => $company->initials(),
+                // Só devolvemos o índice quando ele é estatisticamente
+                // defensável: mostrar um número calculado sobre duas
+                // reclamações seria pior do que não mostrar nenhum.
+                'index' => $company->hasEnoughDataForIndex() && $company->satisfaction_index !== null
+                    ? (int) round($company->satisfaction_index)
+                    : null,
                 'meta' => trim(collect([
                     $company->category?->name,
                     $company->published_complaints_count > 0

@@ -6,43 +6,153 @@
 
 /* =====================================================================
    queixa.me — sistema de design
-   Tom: confiança e transparência sem parecer um site institucional.
-   Azul profundo para a estrutura, verde para resolução, âmbar para
-   pendências, vermelho apenas para falhas reais.
+   ---------------------------------------------------------------------
+   Tom: produto de consumo moderno. Cheio de cor onde a cor significa
+   alguma coisa, com profundidade suave, cantos generosos e movimento
+   contido. Sério pela clareza, não pela austeridade.
+
+   Regras da paleta:
+   - VERDE é a cor da marca e o topo da escala de desfecho (resolvido).
+   - CORAL é energia e acção: só em chamadas primárias e destaques.
+   - ÂMBAR é pendência, TERRACOTA é falha. Nunca decoram — informam.
    ===================================================================== */
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, monospace;
 
-    --color-ink-50: #f6f7fb;
-    --color-ink-100: #eceef6;
-    --color-ink-200: #d7dbe9;
-    --color-ink-300: #b3bad2;
-    --color-ink-400: #8892b4;
-    --color-ink-500: #667099;
-    --color-ink-600: #4d557c;
-    --color-ink-700: #3b4263;
-    --color-ink-800: #262b45;
-    --color-ink-900: #161a2c;
-    --color-ink-950: #0c0f1c;
+    /* --- Tinta: neutros levemente frios, modernos ------------------- */
+    --color-ink-50: #f6f8f9;
+    --color-ink-100: #eceff2;
+    --color-ink-200: #dde2e8;
+    --color-ink-300: #c2cad4;
+    --color-ink-400: #94a0af;
+    --color-ink-500: #6b7887;
+    --color-ink-600: #4e5a68;
+    --color-ink-700: #3a4552;
+    --color-ink-800: #262f3a;
+    --color-ink-900: #161d26;
+    --color-ink-950: #0c1117;
 
-    --color-brand-50: #eef2ff;
-    --color-brand-100: #e0e7ff;
-    --color-brand-200: #c7d2fe;
-    --color-brand-300: #a5b4fc;
-    --color-brand-400: #818cf8;
-    --color-brand-500: #6366f1;
-    --color-brand-600: #4f46e5;
-    --color-brand-700: #4338ca;
-    --color-brand-800: #3730a3;
-    --color-brand-900: #312e81;
+    /* --- Marca: verde vivo ------------------------------------------ */
+    --color-brand-50: #e6f9f2;
+    --color-brand-100: #c2f2e2;
+    --color-brand-200: #8ae5c8;
+    --color-brand-300: #4dd3a9;
+    --color-brand-400: #22bd8f;
+    --color-brand-500: #0fa87b;
+    --color-brand-600: #069068;
+    --color-brand-700: #067354;
+    --color-brand-800: #085a44;
+    --color-brand-900: #084a39;
+    --color-brand-950: #032b21;
 
-    --color-accent-400: #fbbf24;
-    --color-accent-500: #f59e0b;
-    --color-accent-600: #d97706;
+    /* --- Acento: coral — acção e destaque ---------------------------- */
+    --color-accent-50: #fff2ee;
+    --color-accent-100: #ffe1d8;
+    --color-accent-200: #ffc3b1;
+    --color-accent-300: #ff9b7d;
+    --color-accent-400: #ff7551;
+    --color-accent-500: #f9542b;
+    --color-accent-600: #e63c16;
+    --color-accent-700: #bf2d10;
+    --color-accent-800: #9c2814;
+    --color-accent-900: #802615;
 
-    --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
-    --shadow-lift: 0 2px 4px rgb(15 23 42 / 0.05), 0 18px 40px -20px rgb(15 23 42 / 0.25);
+    /* --- Medalhas ---------------------------------------------------- */
+    --color-gold-100: #fdf1cf;
+    --color-gold-300: #f2ce6b;
+    --color-gold-500: #d9a520;
+    --color-gold-700: #9a7112;
+    --color-silver-100: #eef1f4;
+    --color-silver-300: #cbd3dc;
+    --color-silver-500: #93a1b0;
+    --color-silver-700: #5f6b78;
+    --color-bronze-100: #f8e6d6;
+    --color-bronze-300: #ddab7c;
+    --color-bronze-500: #b97b45;
+    --color-bronze-700: #85552d;
+
+    /* --- Superfícies -------------------------------------------------- */
+    --color-paper: #f4f7f8;
+    --color-surface: #ffffff;
+
+    /*
+     * Ramps semânticas afinadas: as versões de série do Tailwind
+     * pertencem a outra paleta. Reescrevê-las aqui faz com que todas as
+     * vistas já escritas usem as cores certas sem lhes tocar.
+     */
+
+    /* Resolvido / positivo */
+    --color-emerald-50: #e6f9f2;
+    --color-emerald-100: #c2f2e2;
+    --color-emerald-200: #8ae5c8;
+    --color-emerald-300: #4dd3a9;
+    --color-emerald-400: #22bd8f;
+    --color-emerald-500: #0fa87b;
+    --color-emerald-600: #069068;
+    --color-emerald-700: #067354;
+    --color-emerald-800: #085a44;
+    --color-emerald-900: #084a39;
+
+    /* Pendente / atenção */
+    --color-amber-50: #fff8e6;
+    --color-amber-100: #ffedbf;
+    --color-amber-200: #ffdb85;
+    --color-amber-300: #fcc23f;
+    --color-amber-400: #f0a712;
+    --color-amber-500: #d18a05;
+    --color-amber-600: #a86a04;
+    --color-amber-700: #85520a;
+    --color-amber-800: #6d430f;
+    --color-amber-900: #5c3810;
+
+    /* Por resolver / erro */
+    --color-rose-50: #fff0ee;
+    --color-rose-100: #ffdfd9;
+    --color-rose-200: #ffc0b4;
+    --color-rose-300: #ff9683;
+    --color-rose-400: #fb6a50;
+    --color-rose-500: #ea4429;
+    --color-rose-600: #c8301a;
+    --color-rose-700: #a52618;
+    --color-rose-800: #88231a;
+    --color-rose-900: #72221b;
+
+    /* Em curso */
+    --color-indigo-50: #eef2ff;
+    --color-indigo-100: #e0e7ff;
+    --color-indigo-200: #c7d2fe;
+    --color-indigo-300: #a5b4fc;
+    --color-indigo-400: #818cf8;
+    --color-indigo-500: #6366f1;
+    --color-indigo-600: #4f46e5;
+    --color-indigo-700: #4338ca;
+    --color-indigo-800: #3730a3;
+    --color-indigo-900: #312e81;
+
+    --color-sky-50: #eff8ff;
+    --color-sky-200: #b9ddfe;
+    --color-sky-800: #1e4d78;
+
+    --color-slate-100: #eceff2;
+    --color-slate-200: #dde2e8;
+    --color-slate-700: #3a4552;
+
+    /* --- Cantos generosos -------------------------------------------- */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.25rem;
+    --radius-3xl: 1.75rem;
+
+    /* --- Profundidade: sombras suaves e em camadas -------------------- */
+    --shadow-card: 0 1px 2px rgb(22 29 38 / 0.04), 0 2px 6px -1px rgb(22 29 38 / 0.06);
+    --shadow-lift: 0 4px 8px -3px rgb(22 29 38 / 0.07), 0 14px 28px -8px rgb(22 29 38 / 0.14);
+    --shadow-float: 0 8px 16px -6px rgb(22 29 38 / 0.10), 0 28px 56px -16px rgb(22 29 38 / 0.22);
+    --shadow-brand: 0 4px 14px -4px rgb(6 144 104 / 0.40);
+    --shadow-accent: 0 4px 14px -4px rgb(249 84 43 / 0.38);
 }
 
 @layer base {
@@ -52,22 +162,39 @@
     }
 
     body {
-        @apply bg-ink-50 text-ink-800 antialiased;
+        background-color: var(--color-paper);
+        @apply text-ink-700 antialiased;
     }
 
-    h1, h2, h3, h4 {
-        @apply text-ink-900 font-semibold tracking-tight;
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-extrabold text-ink-900;
+        letter-spacing: -0.025em;
         text-wrap: balance;
+        line-height: 1.15;
+    }
+
+    h4, h5, h6 {
+        @apply font-bold;
+        letter-spacing: -0.015em;
+    }
+
+    /* Números de dados alinham sempre em coluna. */
+    table, .tabular, dd, .badge, time {
+        font-variant-numeric: tabular-nums;
     }
 
     :focus-visible {
-        @apply outline-2 outline-offset-2 outline-brand-600;
+        @apply outline-2 outline-offset-2 outline-brand-500;
     }
 
-    /* Respeitar quem desativou animações no sistema operativo. */
+    ::selection {
+        @apply bg-brand-500 text-white;
+    }
+
     @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
             animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
             transition-duration: 0.01ms !important;
             scroll-behavior: auto !important;
         }
@@ -75,26 +202,53 @@
 }
 
 @layer components {
+
+    /* --- Estrutura ---------------------------------------------------- */
     .container-page {
-        @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+        @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
     }
 
     .container-narrow {
-        @apply mx-auto w-full max-w-3xl px-4 sm:px-6;
+        @apply mx-auto w-full max-w-3xl px-5 sm:px-6;
     }
 
-    /* --- Botões: usar sempre "btn btn-primary" --- */
+    .rule-heading {
+        @apply flex flex-wrap items-baseline gap-x-4 gap-y-1;
+    }
+
+    /* --- Botões ------------------------------------------------------- */
     .btn {
-        @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
-               transition duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+        @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold
+               transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-45;
+        letter-spacing: -0.01em;
     }
 
     .btn-primary {
-        @apply bg-brand-600 text-white shadow-sm hover:bg-brand-700 active:bg-brand-800;
+        @apply bg-brand-600 text-white hover:bg-brand-700;
+        box-shadow: var(--shadow-brand);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px -4px rgb(6 144 104 / 0.48);
+    }
+
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+
+    .btn-accent {
+        @apply bg-accent-500 text-white hover:bg-accent-600;
+        box-shadow: var(--shadow-accent);
+    }
+
+    .btn-accent:hover {
+        transform: translateY(-1px);
     }
 
     .btn-secondary {
-        @apply bg-white text-ink-800 ring-1 ring-ink-200 hover:bg-ink-50 hover:ring-ink-300;
+        @apply border border-ink-200 bg-surface text-ink-800 hover:border-ink-300 hover:bg-ink-50;
+        box-shadow: var(--shadow-card);
     }
 
     .btn-ghost {
@@ -106,49 +260,55 @@
     }
 
     .btn-lg {
-        @apply rounded-2xl px-6 py-3.5 text-base;
+        @apply rounded-2xl px-7 py-3.5 text-base;
     }
 
     .btn-sm {
-        @apply rounded-lg px-3 py-1.5 text-xs;
+        @apply rounded-lg px-3.5 py-2 text-xs;
     }
 
-    /* --- Superfícies --- */
+    /* --- Superfícies --------------------------------------------------- */
     .card {
-        @apply rounded-2xl bg-white ring-1 ring-ink-200/70;
-        box-shadow: var(--shadow-soft);
+        @apply rounded-2xl bg-surface;
+        box-shadow: var(--shadow-card);
     }
 
     .card-hover {
-        @apply transition duration-200 hover:ring-ink-300;
+        @apply transition-all duration-200;
     }
 
     .card-hover:hover {
         box-shadow: var(--shadow-lift);
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
 
     .card-body {
         @apply p-5 sm:p-6;
     }
 
-    /* --- Formulários --- */
+    /* Painel com contorno em vez de sombra, para conteúdo secundário. */
+    .panel {
+        @apply rounded-2xl border border-ink-200 bg-surface;
+    }
+
+    /* --- Formulários ---------------------------------------------------- */
     .label {
-        @apply mb-1.5 block text-sm font-medium text-ink-800;
+        @apply mb-2 block text-sm font-bold text-ink-800;
     }
 
     .hint {
-        @apply mt-1.5 text-xs text-ink-500;
+        @apply mt-2 text-xs leading-relaxed text-ink-500;
     }
 
     .input {
-        @apply block w-full rounded-xl border-0 bg-white px-3.5 py-2.5 text-ink-900 shadow-sm
-               ring-1 ring-inset ring-ink-200 placeholder:text-ink-400
-               focus:ring-2 focus:ring-inset focus:ring-brand-600 sm:text-sm;
+        @apply block w-full rounded-xl border border-ink-200 bg-surface px-4 py-3 text-ink-900
+               transition-all duration-150 placeholder:text-ink-400
+               hover:border-ink-300 focus:border-brand-500 focus:outline-none
+               focus:ring-4 focus:ring-brand-500/12 sm:text-sm;
     }
 
     .input-error {
-        @apply ring-rose-400 focus:ring-rose-500;
+        @apply border-rose-400 focus:border-rose-500 focus:ring-rose-500/12;
     }
 
     .textarea {
@@ -156,29 +316,89 @@
     }
 
     .checkbox {
-        @apply mt-0.5 size-4 shrink-0 rounded border-ink-300 text-brand-600 focus:ring-brand-600;
+        @apply mt-0.5 size-[1.125rem] shrink-0 rounded-md border-2 border-ink-300 text-brand-600
+               transition focus:ring-4 focus:ring-brand-500/15 focus:ring-offset-0;
     }
 
     .error-text {
-        @apply mt-1.5 flex items-start gap-1 text-xs font-medium text-rose-600;
+        @apply mt-2 flex items-start gap-1.5 text-xs font-semibold text-rose-600;
     }
 
-    /* --- Etiquetas: usar "badge" + classes de cor --- */
+    /* Cartão selecionável — rádio ou checkbox com corpo clicável. */
+    .choice-card {
+        @apply flex cursor-pointer items-start gap-3 rounded-xl border-2 border-ink-200 bg-surface p-4
+               transition-all duration-150 hover:border-ink-300 hover:bg-ink-50/60;
+    }
+
+    .choice-card:has(input:checked) {
+        @apply border-brand-500 bg-brand-50/70;
+    }
+
+    /* --- Etiquetas ------------------------------------------------------ */
     .badge {
-        @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset;
+        @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold
+               ring-1 ring-inset;
+        letter-spacing: -0.005em;
     }
 
-    /* --- Conteúdo editorial --- */
+    .eyebrow {
+        @apply text-[0.6875rem] font-extrabold uppercase text-ink-400;
+        letter-spacing: 0.1em;
+    }
+
+    /* --- Índice: elemento de assinatura ---------------------------------- */
+    .index-chip {
+        @apply inline-flex items-baseline gap-1 rounded-full px-3 py-1.5 font-extrabold;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .index-track {
+        @apply relative h-2 w-full overflow-hidden rounded-full bg-ink-100;
+    }
+
+    .index-fill {
+        @apply absolute inset-y-0 left-0 rounded-full transition-[width] duration-700 ease-out;
+    }
+
+    /* --- Medalhas do ranking ---------------------------------------------- */
+    .medal {
+        @apply flex items-center justify-center rounded-full font-extrabold;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .medal-gold {
+        background: linear-gradient(145deg, var(--color-gold-300), var(--color-gold-500));
+        @apply text-white;
+        box-shadow: 0 4px 12px -3px rgb(217 165 32 / 0.55);
+    }
+
+    .medal-silver {
+        background: linear-gradient(145deg, var(--color-silver-300), var(--color-silver-500));
+        @apply text-white;
+        box-shadow: 0 4px 12px -3px rgb(147 161 176 / 0.5);
+    }
+
+    .medal-bronze {
+        background: linear-gradient(145deg, var(--color-bronze-300), var(--color-bronze-500));
+        @apply text-white;
+        box-shadow: 0 4px 12px -3px rgb(185 123 69 / 0.5);
+    }
+
+    .medal-plain {
+        @apply bg-ink-100 text-ink-500;
+    }
+
+    /* --- Conteúdo editorial ------------------------------------------------ */
     .prose-qm {
-        @apply leading-relaxed text-ink-700;
+        @apply text-[0.9375rem] leading-[1.75] text-ink-600;
     }
 
     .prose-qm h2 {
-        @apply mt-10 mb-3 text-xl font-semibold text-ink-900;
+        @apply mt-10 mb-3 text-xl font-extrabold text-ink-900;
     }
 
     .prose-qm h3 {
-        @apply mt-8 mb-2 text-lg font-semibold text-ink-900;
+        @apply mt-8 mb-2 text-base font-bold text-ink-900;
     }
 
     .prose-qm p {
@@ -186,19 +406,20 @@
     }
 
     .prose-qm ul {
-        @apply mb-4 ml-5 list-disc space-y-1.5;
+        @apply mb-4 ml-5 list-disc space-y-2 marker:text-brand-400;
     }
 
     .prose-qm ol {
-        @apply mb-4 ml-5 list-decimal space-y-1.5;
+        @apply mb-4 ml-5 list-decimal space-y-2 marker:text-ink-400;
     }
 
     .prose-qm a {
-        @apply font-medium text-brand-700 underline underline-offset-2 hover:text-brand-800;
+        @apply font-semibold text-brand-700 underline decoration-brand-300 decoration-2 underline-offset-2
+               transition hover:decoration-brand-600;
     }
 
     .prose-qm strong {
-        @apply font-semibold text-ink-900;
+        @apply font-bold text-ink-900;
     }
 
     .prose-qm table {
@@ -206,16 +427,22 @@
     }
 
     .prose-qm th {
-        @apply border-b border-ink-200 py-2 text-left font-semibold text-ink-900;
+        @apply border-b-2 border-ink-200 py-2 text-left font-bold text-ink-900;
     }
 
     .prose-qm td {
         @apply border-b border-ink-100 py-2;
     }
 
-    /* --- Navegação --- */
+    .prose-qm code {
+        @apply rounded-md bg-ink-100 px-1.5 py-0.5 text-[0.85em] text-ink-800;
+        font-family: var(--font-mono);
+    }
+
+    /* --- Navegação ---------------------------------------------------------- */
     .nav-link {
-        @apply rounded-lg px-3 py-2 text-sm font-medium text-ink-600 transition hover:bg-ink-100 hover:text-ink-900;
+        @apply rounded-lg px-3 py-2 text-sm font-semibold text-ink-600 transition
+               hover:bg-ink-100 hover:text-ink-900;
     }
 
     .nav-link-active {
@@ -227,6 +454,78 @@
     }
 
     .skip-link:focus {
-        @apply not-sr-only absolute left-4 top-4 z-50 rounded-lg bg-brand-600 px-4 py-2 font-medium text-white;
+        @apply not-sr-only absolute left-4 top-4 z-50 rounded-xl bg-brand-600 px-4 py-2 font-bold text-white;
     }
+
+    /* --- Tabelas de dados ---------------------------------------------------- */
+    .data-table {
+        @apply w-full text-sm;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .data-table thead th {
+        @apply border-b border-ink-200 px-4 py-3 text-left text-[0.6875rem] font-extrabold
+               uppercase text-ink-400;
+        letter-spacing: 0.08em;
+    }
+
+    .data-table tbody tr {
+        @apply border-b border-ink-100 transition-colors last:border-0 hover:bg-ink-50;
+    }
+
+    .data-table tbody td {
+        @apply px-4 py-4;
+    }
+
+    /* --- Modal --------------------------------------------------------------- */
+    .modal-backdrop {
+        @apply fixed inset-0 z-50 bg-ink-950/45 backdrop-blur-sm;
+        animation: qm-fade 0.18s ease-out;
+    }
+
+    .modal-panel {
+        @apply relative w-full overflow-hidden rounded-2xl bg-surface;
+        box-shadow: var(--shadow-float);
+        animation: qm-pop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+}
+
+/* =====================================================================
+   Animações
+   ===================================================================== */
+
+@keyframes qm-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes qm-pop {
+    from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes qm-rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Traço do visto do ecrã de sucesso. */
+@keyframes qm-draw {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes qm-ring {
+    0% { transform: scale(0.6); opacity: 0.55; }
+    100% { transform: scale(2.4); opacity: 0; }
+}
+
+@utility animate-rise {
+    animation: qm-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Peso e tracking para números grandes de destaque. */
+@utility font-display {
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
 }

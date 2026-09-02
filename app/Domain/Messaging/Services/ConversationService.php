@@ -70,16 +70,23 @@ class ConversationService
                 'body' => $body,
             ]);
 
-            $conversation->forceFill([
-                'last_message_at' => now(),
-                'messages_count' => $conversation->messages_count + 1,
-                'user_unread_count' => $senderType === ActorType::Company
-                    ? $conversation->user_unread_count + 1
-                    : $conversation->user_unread_count,
-                'company_unread_count' => $senderType === ActorType::Consumer
-                    ? $conversation->company_unread_count + 1
-                    : $conversation->company_unread_count,
-            ])->save();
+            // Incrementos atómicos em vez de ler-somar-gravar: dois agentes da
+            // mesma empresa a responder ao mesmo tempo perderiam contagens,
+            // e uma conversa acabada de criar nem sequer tem estes atributos
+            // carregados em memória.
+            $counters = ['messages_count' => 1];
+
+            if ($senderType === ActorType::Company) {
+                $counters['user_unread_count'] = 1;
+            } else {
+                $counters['company_unread_count'] = 1;
+            }
+
+            $conversation->newQuery()
+                ->whereKey($conversation->getKey())
+                ->incrementEach($counters, ['last_message_at' => now()]);
+
+            $conversation->refresh();
 
             return $message;
         });
